@@ -1,0 +1,175 @@
+/* utils */
+
+/* 基礎權重  =>  $default: 500, $lighter: 100, $darker: 700 */
+$primary-colr: (
+  100: #69e2ff,
+  500: #00b0ff,
+  700: #0081cb,
+);
+
+@mixin flex-ac {
+  display: flex;
+  position: relative;
+  align-items: center;
+}
+@mixin flex-c {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+}
+@mixin font($size, $color, $family, $lineHeght: 1.2) {
+  font-size: $size;
+  color: $color;
+  font-family: $family;
+  line-height: $lineHeght;
+}
+@mixin text-overflow {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.warning-color {
+  color: #f44336;
+}
+
+button[disabled] {
+  color: rgba(0, 0, 0, 0.26);
+  background-color: rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+/* main */
+.title-font {
+  @include font(32px, #000, Lato);
+  padding: 20px;
+  background-color: rgb(245, 245, 245);
+}
+form {
+  display: flex;
+  flex-direction: column;
+}
+.order-form {
+  @include flex-ac();
+  width: 170px;
+  padding-left: 10px;
+  input {
+    width: calc(100% - 60px);
+  }
+  p {
+    width: 60px;
+  }
+}
+.text-danger {
+  position: absolute;
+  bottom: 0px;
+  white-space: nowrap;
+  font-family: Lato;
+}
+
+.order-form-main-field {
+  display: flex;
+}
+.order-form-optional {
+  max-width: 800px;
+  width: 100%;
+  textarea {
+    resize: auto;
+  }
+}
+
+/* order Lists 訂購表單 */
+.order-list-hr {
+  border: 0;
+  height: 2px;
+  /* title-font: padding 20px * 2 (R/L) */
+  width: calc(100% - 40px);
+  background-color: #ccc;
+}
+
+.order-list {
+  margin: 0 auto;
+  width: 80%;
+  height: calc(100vh - 320px); // 100vh - 其他高度
+  overflow: auto;
+}
+
+.order-list__item,
+.order-header {
+  width: calc(100% - 12px); // box-shadow 模糊
+  margin: 0 auto;
+  margin-bottom: 10px;
+  @include font(15px, #000, TaipeiSansTCBeta-Regular, 2);
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+  p:not(:last-child) {
+    padding-right: 2px;
+  }
+}
+.order-list {
+  padding: 6px 0;
+}
+
+.order-header {
+  width: calc(80% - 10px); // 5px : Scrollbar width
+  height: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 0; //  清除 order-list__item inherit
+}
+
+.order-list__info {
+  display: flex;
+  flex-direction: row;
+}
+.order-list__change {
+  @include flex-c();
+}
+
+/* 欄位寬度 */
+
+.order-field {
+  @include font(15px, #000, TaipeiSansTCBeta-Regular, 1.5);
+  width: 120px;
+  padding-left: 10px;
+  box-sizing: border-box;
+  @include text-overflow;
+  &[readonly] {
+    border-color: transparent;
+  }
+}
+.order-field-optional {
+  width: calc(100% - 120px * 4);
+  input {
+    width: calc(100% - 70px);
+  }
+  p {
+    width: 70px;
+  }
+}
+
+/* btn  */
+
+.btn-modify,
+.btn-delete {
+  width: 100px;
+  @include font(15px, #000, TaipeiSansTCBeta-Light, 1.5);
+  background-color: map_get($primary-colr, 100);
+  border: 1px solid map_get($primary-colr, 100);
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+.btn-delete {
+  margin-left: 20px;
+  color: #fff;
+  background-color: #f44336;
+  border-color: #f44336;
+}
+.btn-add {
+  margin: 20px;
+  color: #fff;
+  border-color: map_get($primary-colr, 500);
+  background-color: map_get($primary-colr, 500);
+}
+.btn-fix-position {
+  margin: 0 auto;
+  width: 100px;
+}

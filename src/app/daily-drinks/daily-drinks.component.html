@@ -1,0 +1,103 @@
+<h2 class="title-font"> Order List</h2>
+<!-- 基礎的  Angualr reactive-forms (FormGroup 例項 )-->
+<form [formGroup]="orderForm" (ngSubmit)="onSubmit(orderForm.value)">
+  <div class="order-form-main-field">
+    <div class="order-form">
+      <p class="order-field">姓名: </p>
+      <input type="text" placeholder="Require" formControlName='name'>
+    </div>
+    <ng-container formGroupName="drinkDetails">
+      <div class="order-form">
+        <p class="order-field">品項: </p>
+        <input type="text" placeholder="Require" formControlName='drink'>
+      </div>
+      <div class="order-form">
+        <p class="order-field">甜度: </p>
+        <input type="text" placeholder="Require" formControlName='sugar'>
+      </div>
+    </ng-container>
+    <div class="order-form order-field-optional">
+      <p class="order-field ">總金額: </p>
+      <input type="text" placeholder="Require Num." formControlName='price'>
+      <p class="warning-color text-danger" *ngIf="orderForm.get('price').hasError('pattern')">Number Only
+      </p>
+    </div>
+    <button [disabled]="!orderForm.valid" class="btn-modify btn-add">新增</button>
+  </div>
+  <div class="order-form order-form-optional">
+    <p class="order-field">備註: </p>
+    <textarea type="text" placeholder="Optional" formControlName='note'> </textarea>
+  </div>
+</form>
+<hr class="order-list-hr">
+<!-- 進階的  Angualr reactive-forms (FormArray) -->
+<div class="order-header">
+  <div class="order-list__info">
+    <p class="order-field">姓名</p>
+    <p class="order-field">品項 </p>
+    <p class="order-field">甜度 </p>
+    <p class="order-field warning-color">總金額 </p>
+    <p class="order-field">備註 </p>
+  </div>
+</div>
+<ul class="order-list" [formGroup]="displayForm">
+  <perfect-scrollbar>
+    <!-- For loop : 畫面顯示(orderDetails) , 畫面顯示亦可純顯示  -->
+    <li class="order-list__item" *ngFor="let orderDetail of orderDetails; let idx=index" formArrayName="inputFormArray">
+      <!-- For loop : 資料欄位(formGroupName)  -->
+      <ng-container [formGroupName]="idx">
+        <div class="order-list__info">
+          <input class="order-field" formControlName='name' [readonly]="orderDetail.isReadonly">
+          <!-- 資料 nested => formGroupName + formControlName-->
+          <ng-container formGroupName="drinkDetails">
+            <input class="order-field" formControlName='drink' [readonly]="orderDetail.isReadonly">
+            <input class="order-field" formControlName='sugar' [readonly]="orderDetail.isReadonly">
+          </ng-container>
+          <!-- demo : 套用 orderDetails 顯示幣值 -->
+          <ng-container>
+            <input class="order-field warning-color" formControlName='price' *ngIf="!orderDetail.isReadonly">
+            <p class="order-field warning-color" *ngIf="orderDetail.isReadonly"> {{ orderDetail.price | currency:'TWD'}}
+            </p>
+          </ng-container>
+          <input class="order-field order-field-optional" [title]='orderDetail.note' formControlName='note'
+            [readonly]="orderDetail.isReadonly">
+        </div>
+        <!-- btn : 修改區域 -->
+        <div class="order-list__change">
+          <button class="btn-modify"
+            (click)="orderDetail.isReadonly = !orderDetail.isReadonly; keepFunctionDoPatchAPI(orderDetail.isReadonly)">
+            <ng-container *ngIf="orderDetail.isReadonly">
+              修改
+            </ng-container>
+            <ng-container *ngIf="!orderDetail.isReadonly">
+              完成
+            </ng-container>
+          </button>
+          <button *ngIf="orderDetail.isReadonly" (click)="remove(idx)" class="btn-delete">刪除</button>
+        </div>
+      </ng-container>
+    </li>
+  </perfect-scrollbar>
+</ul>
+<div class="btn-fix-position">
+  <button class="btn-modify" (click)="listForAPIResponse()">Check all</button>
+</div>
+
+<!-- 純綁定畫面 -->
+<!-- <ul class="order-list">
+  <perfect-scrollbar>
+    <li class="order-list__item" *ngFor="let orderDetail of orderDetails">
+      <div class="order-list__info">
+        <p class="order-field">{{orderDetail.name}} </p>
+        <p class="order-field">{{orderDetail.drinkDetails.drink}} </p>
+        <p class="order-field">{{orderDetail.drinkDetails.sugar}} </p>
+        <p class="order-field warning-color">{{orderDetail.price}} </p>
+        <p class="order-field" [title]='orderDetail.note'>{{orderDetail.note}} </p>
+      </div>
+      <div class="order-list__change">
+      <button class="btn-modify">修改</button>
+      <button class="btn-delete">刪除</button>
+    </div>
+    </li>
+  </perfect-scrollbar>
+</ul> -->
